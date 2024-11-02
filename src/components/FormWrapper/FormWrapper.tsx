@@ -510,14 +510,3 @@ export type {
   FormState,
   FileValidationError
 };
-
-/*
-comprehensive form security enhancements
-
-Breaking Changes:
-- FormWrapper API now requires security configuration
-- Added new required props for CSRF and encryption
-- Modified form submission flow to include security checks
-
-*/
-
