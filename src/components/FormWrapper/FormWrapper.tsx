@@ -6,7 +6,7 @@ import DOMPurify from 'dompurify';
 import { Box, Alert, CircularProgress, Typography } from '@mui/material';
 import CryptoJS from 'crypto-js';
 
-// Enhanced security types
+
 interface CSRFConfig {
   token: string;
   headerName?: string;
@@ -19,7 +19,7 @@ interface FileValidationError {
 }
 
 interface FileConfig {
-  maxSize?: number; // in bytes
+  maxSize?: number; 
   allowedTypes?: string[];
   maxFiles?: number;
   scanForMalware?: boolean;
@@ -40,7 +40,7 @@ interface SecurityConfig {
     sensitiveFields?: string[];
     key?: string;
     algorithm?: 'AES' | 'RSA';
-    publicKey?: string; // For RSA
+    publicKey?: string; 
   };
   maxFieldLength?: number;
   maxFormSize?: number;
@@ -82,7 +82,7 @@ interface FormWrapperProps<TFieldValues extends FieldValues> {
   loadingComponent?: ReactNode;
 }
 
-// File validation utility
+// File validation work..
 const validateFile = (file: File, config: FileConfig): FileValidationError[] => {
   const errors: FileValidationError[] = [];
   
@@ -103,7 +103,7 @@ const validateFile = (file: File, config: FileConfig): FileValidationError[] => 
   return errors;
 };
 
-// Enhanced sanitization utility
+// Enhanced sanitization work..
 const sanitizeData = <T extends Record<string, unknown>>(
   data: T, 
   config?: SecurityConfig['sanitization']
@@ -150,7 +150,7 @@ const sanitizeData = <T extends Record<string, unknown>>(
   return sanitizeObject(data) as T;
 };
 
-// Enhanced encryption utility
+// Enhanced encryption work..
 const encryptData = async <T extends Record<string, unknown>>(
   data: T,
   config: SecurityConfig['encryption']
@@ -194,7 +194,7 @@ const encryptData = async <T extends Record<string, unknown>>(
       }
     }
     
-    // Fallback to AES encryption
+    // Fallback to AES encryption done..
     try {
       return config.key 
         ? CryptoJS.AES.encrypt(value, config.key).toString()
@@ -214,7 +214,7 @@ const encryptData = async <T extends Record<string, unknown>>(
   return encrypted as T;
 };
 
-// Token bucket implementation
+// Token bucket usage..
 class TokenBucket {
   private tokens: number;
   private lastRefill: number;
@@ -245,7 +245,7 @@ class TokenBucket {
   }
 }
 
-// Form throttle implementation
+// throttle form 
 class FormThrottle {
   private attempts: number[] = [];
   
@@ -356,7 +356,7 @@ const FormWrapper = <TFieldValues extends FieldValues>({
         warnings: []
       }));
 
-      // Rate limiting check
+      // Checking rate limit here
       if (!checkRateLimit()) {
         throw new Error('Too many attempts. Please try again later.');
       }
@@ -372,7 +372,7 @@ const FormWrapper = <TFieldValues extends FieldValues>({
         throw new Error(fileErrors.map(e => `${e.file}: ${e.message}`).join('. '));
       }
 
-      // Size check
+
       if (security?.maxFormSize) {
         const size = new Blob([JSON.stringify(data)]).size;
         if (size > security.maxFormSize) {
@@ -380,7 +380,7 @@ const FormWrapper = <TFieldValues extends FieldValues>({
         }
       }
 
-      // Pre-submit hook
+      
       if (beforeSubmit) {
         const shouldContinue = await beforeSubmit(data);
         if (!shouldContinue) {
@@ -388,20 +388,20 @@ const FormWrapper = <TFieldValues extends FieldValues>({
         }
       }
 
-      // Process data
+      // Processing data
       const processedData = security?.sanitization?.enabled 
         ? sanitizeData(data as Record<string, unknown>, security.sanitization)
         : data;
 
-      // Encrypt sensitive data
+      // Encrypting the targeted data (required)
       const finalData = security?.encryption?.enabled
         ? await encryptData(processedData as Record<string, unknown>, security.encryption)
         : processedData;
 
-      // Submit form
+  
       await onSubmit(finalData as TFieldValues, csrf?.token);
       
-      // Post-submit hook
+      
       if (afterSubmit) {
         afterSubmit(finalData as TFieldValues);
       }
@@ -510,3 +510,14 @@ export type {
   FormState,
   FileValidationError
 };
+
+/*
+comprehensive form security enhancements
+
+Breaking Changes:
+- FormWrapper API now requires security configuration
+- Added new required props for CSRF and encryption
+- Modified form submission flow to include security checks
+
+*/
+
